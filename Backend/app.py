@@ -8,7 +8,7 @@ from flask_cors import CORS
 import joblib, numpy as np, os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://water-energy-nexus-r44x.vercel.app"])
 
 BASE = os.path.dirname(__file__)
 try:
