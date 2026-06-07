@@ -1,5 +1,4 @@
-const API_BASE_URL = 'http://127.0.0.1:5000';
-const CLASS_LABELS = ['Patent', 'Policy', 'Project', 'Publication'];
+const API_BASE_URL = 'https://water-energy-nexus-smoky.vercel.app';const CLASS_LABELS = ['Patent', 'Policy', 'Project', 'Publication'];
 
 // Selected active prediction engine ('ML' or 'DL')
 let activeEngine = 'ML';
