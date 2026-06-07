@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Water-Energy Nexus Portal — AI Engine</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="AI-Powered prediction dashboard for Water-Energy Nexus research, modeling policy, patents, projects, and study outputs."/>
+  <meta name="keywords" content="Water-Energy Nexus, Artificial Intelligence, Machine Learning, Deep Learning, Climate Analytics"/>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Background Blobs -->
+  <div class="glow-orb orb-primary"></div>
+  <div class="glow-orb orb-secondary"></div>
+  <div class="glow-orb orb-tertiary"></div>
+
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="icon-hexagon">
+          <i data-lucide="waves" class="logo-icon"></i>
+        </div>
+        <div class="brand-meta">
+          <h1>Nexus Intelligence</h1>
+          <p>Global Water-Energy Predictive Core</p>
+        </div>
+      </div>
+
+      <!-- Live Connection Status & Model Chips -->
+      <div class="header-status">
+        <div class="status-badge" id="system-status">
+          <span class="status-pulse offline" id="status-dot"></span>
+          <span id="status-text">OFFLINE</span>
+        </div>
+        <div class="model-status-chips">
+          <div class="status-chip" id="ml-status">ML Engine: Off</div>
+          <div class="status-chip" id="dl-status">DL Engine: Off</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content Layout -->
+    <div class="dashboard-layout">
+      <!-- Input Panel -->
+      <section class="glass-panel" id="controls-section">
+        <div class="panel-header">
+          <div class="header-title">
+            <i data-lucide="sliders-horizontal" class="icon-accent"></i>
+            <h2>Configuration Matrix</h2>
+          </div>
+          <p class="panel-subtitle">Fine-tune the scenario parameters to query the neural net.</p>
+        </div>
+
+        <!-- Scenario Presets Bar -->
+        <div class="presets-container">
+          <span class="presets-title"><i data-lucide="sparkles"></i> Load Scenario:</span>
+          <div class="presets-actions">
+            <button type="button" class="preset-btn" onclick="loadPreset('patent')"><i data-lucide="file-check"></i> Patent</button>
+            <button type="button" class="preset-btn" onclick="loadPreset('policy')"><i data-lucide="scale"></i> Policy</button>
+            <button type="button" class="preset-btn" onclick="loadPreset('project')"><i data-lucide="rocket"></i> Project</button>
+            <button type="button" class="preset-btn" onclick="loadPreset('publication')"><i data-lucide="book-open"></i> Study</button>
+            <button type="button" class="preset-btn btn-shuffle" onclick="loadPreset('random')"><i data-lucide="shuffle"></i> Randomize</button>
+          </div>
+        </div>
+
+        <!-- Model Engine Selector -->
+        <div class="engine-selector-wrap">
+          <span class="selector-label">Inference Engine:</span>
+          <div class="engine-switch">
+            <button type="button" class="engine-btn active" id="engine-ml" onclick="selectEngine('ML')">
+              <i data-lucide="brain-circuit"></i>
+              <div>
+                <span class="engine-title">Machine Learning</span>
+                <span class="engine-subtitle">Gradient Boosting Model</span>
+              </div>
+            </button>
+            <button type="button" class="engine-btn" id="engine-dl" onclick="selectEngine('DL')">
+              <i data-lucide="layers"></i>
+              <div>
+                <span class="engine-title">Deep Learning</span>
+                <span class="engine-subtitle">LSTM Recurrent Net</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Input Tab Switches -->
+        <div class="tab-navigation">
+          <button type="button" class="tab-btn active" onclick="switchFormTab('metadata', this)"><i data-lucide="globe-2"></i> Metadata</button>
+          <button type="button" class="tab-btn" onclick="switchFormTab('domain', this)"><i data-lucide="target"></i> Domain</button>
+          <button type="button" class="tab-btn" onclick="switchFormTab('impact', this)"><i data-lucide="trending-up"></i> Impact</button>
+          <button type="button" class="tab-btn" onclick="switchFormTab('specialty', this)"><i data-lucide="cpu"></i> Specialty</button>
+        </div>
+
+        <!-- Input Form -->
+        <form id="nexus-predictor-form" onsubmit="event.preventDefault();">
+          
+          <!-- TAB 1: Metadata -->
+          <div class="tab-pane active" id="pane-metadata">
+            <div class="input-grid">
+              <div class="form-group">
+                <label for="f_year"><i data-lucide="calendar"></i> Year</label>
+                <input type="number" id="f_year" value="2022" min="2016" max="2026">
+              </div>
+              <div class="form-group">
+                <label for="f_month"><i data-lucide="calendar-days"></i> Month</label>
+                <input type="number" id="f_month" value="6" min="1" max="12">
+              </div>
+              <div class="form-group">
+                <label for="f_quarter"><i data-lucide="pie-chart"></i> Quarter</label>
+                <select id="f_quarter"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_country"><i data-lucide="map"></i> Country</label>
+                <select id="f_country"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_region"><i data-lucide="map-pin"></i> Region</label>
+                <select id="f_region"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_climate_zone"><i data-lucide="thermometer-sun"></i> Climate Zone</label>
+                <select id="f_climate_zone"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_water_stress_level"><i data-lucide="droplet"></i> Water Stress</label>
+                <select id="f_water_stress_level"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_organization"><i data-lucide="building"></i> Organization</label>
+                <select id="f_organization"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_collaboration_type"><i data-lucide="users-2"></i> Collaboration</label>
+                <select id="f_collaboration_type"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_language"><i data-lucide="languages"></i> Language</label>
+                <select id="f_language"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_open_access"><i data-lucide="unlock"></i> Open Access</label>
+                <select id="f_open_access"></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Domain -->
+          <div class="tab-pane" id="pane-domain">
+            <div class="input-grid">
+              <div class="form-group">
+                <label for="f_sector"><i data-lucide="briefcase"></i> Sector</label>
+                <select id="f_sector"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_ai_technique"><i data-lucide="binary"></i> AI Technique</label>
+                <select id="f_ai_technique"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_water_application"><i data-lucide="droplets"></i> Water Application</label>
+                <select id="f_water_application"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_energy_application"><i data-lucide="zap"></i> Energy Application</label>
+                <select id="f_energy_application"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_nexus_focus"><i data-lucide="activity"></i> Nexus Focus</label>
+                <select id="f_nexus_focus"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_deployment_scale"><i data-lucide="expand"></i> Deployment Scale</label>
+                <select id="f_deployment_scale"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_status"><i data-lucide="check-circle-2"></i> Current Status</label>
+                <select id="f_status"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_sdg_alignment"><i data-lucide="heart"></i> SDG Alignment</label>
+                <select id="f_sdg_alignment"></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Impact -->
+          <div class="tab-pane" id="pane-impact">
+            <div class="input-grid">
+              <div class="form-group">
+                <label for="f_funding_usd"><i data-lucide="dollar-sign"></i> Funding (USD)</label>
+                <input type="number" id="f_funding_usd" value="150000">
+              </div>
+              <div class="form-group">
+                <label for="f_investment_roi"><i data-lucide="percent"></i> Investment ROI</label>
+                <input type="number" id="f_investment_roi" value="2.5" step="0.1">
+              </div>
+              <div class="form-group">
+                <label for="f_population_served"><i data-lucide="users"></i> Population Served</label>
+                <input type="number" id="f_population_served" value="50000">
+              </div>
+              <div class="form-group">
+                <label for="f_citation_count"><i data-lucide="message-square"></i> Citations</label>
+                <input type="number" id="f_citation_count" value="15">
+              </div>
+              <div class="form-group">
+                <label for="f_impact_score"><i data-lucide="bar-chart-3"></i> Impact Score (1-100)</label>
+                <input type="number" id="f_impact_score" value="55" step="0.1">
+              </div>
+              <div class="form-group">
+                <label for="f_innovation_index"><i data-lucide="lightbulb"></i> Innovation Index</label>
+                <input type="number" id="f_innovation_index" value="5" step="0.1">
+              </div>
+              <div class="form-group">
+                <label for="f_model_performance_metric"><i data-lucide="gauge"></i> Perf. Metric</label>
+                <select id="f_model_performance_metric"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_model_performance_value"><i data-lucide="check-circle"></i> Perf. Value</label>
+                <input type="number" id="f_model_performance_value" value="0.85" step="0.01">
+              </div>
+              <div class="form-group">
+                <label for="f_co2_reduction_tons"><i data-lucide="cloud-rain"></i> CO2 Red. (Tons)</label>
+                <input type="number" id="f_co2_reduction_tons" value="500">
+              </div>
+              <div class="form-group">
+                <label for="f_water_savings_liters"><i data-lucide="droplet"></i> Water Sav. (Liters)</label>
+                <input type="number" id="f_water_savings_liters" value="50000">
+              </div>
+              <div class="form-group">
+                <label for="f_energy_savings_kwh"><i data-lucide="battery"></i> Energy Sav. (kWh)</label>
+                <input type="number" id="f_energy_savings_kwh" value="2000">
+              </div>
+              <div class="form-group">
+                <label for="f_renewable_energy_share_pct"><i data-lucide="sun"></i> Renewable Share (%)</label>
+                <input type="number" id="f_renewable_energy_share_pct" value="45" step="0.1">
+              </div>
+              <div class="form-group">
+                <label for="f_venue_h_index"><i data-lucide="award"></i> Venue H-Index</label>
+                <input type="number" id="f_venue_h_index" value="50">
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: Specialty -->
+          <div class="tab-pane" id="pane-specialty">
+            <div class="input-grid">
+              <div class="form-group">
+                <label for="f_patent_class"><i data-lucide="key-round"></i> Patent Class</label>
+                <select id="f_patent_class"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_patent_family_size"><i data-lucide="network"></i> Patent Family Size</label>
+                <input type="number" id="f_patent_family_size" value="3">
+              </div>
+              <div class="form-group">
+                <label for="f_policy_type"><i data-lucide="gavel"></i> Policy Type</label>
+                <select id="f_policy_type"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_policy_level"><i data-lucide="layers-2"></i> Policy Level</label>
+                <select id="f_policy_level"></select>
+              </div>
+              <div class="form-group">
+                <label for="f_policy_stringency_score"><i data-lucide="shield-alert"></i> Policy Stringency</label>
+                <input type="number" id="f_policy_stringency_score" value="3" step="0.1">
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+        <!-- Execute Action Button -->
+        <div class="action-footer">
+          <button type="button" class="btn-execute" id="btn-predict" onclick="runPrediction()">
+            <i data-lucide="cpu" class="icon-spin-hover"></i>
+            <span>EXECUTE AI MODEL ANALYSIS</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Outputs Panel -->
+      <section class="glass-panel output-panel" id="results-section">
+        <div class="panel-header">
+          <div class="header-title">
+            <i data-lucide="terminal" class="icon-accent"></i>
+            <h2>Neural Predictions Dashboard</h2>
+          </div>
+          <p class="panel-subtitle">Simulation prediction outputs and inference distribution.</p>
+        </div>
+
+        <!-- STATE 1: Empty Placeholder State -->
+        <div id="state-placeholder" class="state-container">
+          <div class="cyber-radar">
+            <div class="radar-line"></div>
+            <i data-lucide="activity" class="radar-icon"></i>
+          </div>
+          <h3>System Awaiting Parameters</h3>
+          <p>Modify the values on the configuration matrix, select your target inference engine, then trigger the neural prediction run.</p>
+        </div>
+
+        <!-- STATE 2: Loading State -->
+        <div id="state-loading" class="state-container hidden">
+          <div class="futuristic-loader">
+            <div class="loader-circle-outer"></div>
+            <div class="loader-circle-inner"></div>
+            <i data-lucide="cpu" class="loader-cpu-icon"></i>
+          </div>
+          <h3 id="loading-header">Accessing Core Inference...</h3>
+          <p id="loading-desc">Translating inputs into vector footprints...</p>
+        </div>
+
+        <!-- STATE 3: Error State -->
+        <div id="state-error" class="state-container hidden">
+          <div class="warning-box">
+            <div class="warning-header">
+              <i data-lucide="alert-octagon"></i>
+              <span>Core Connection Failure</span>
+            </div>
+            <p id="err-message">Backend server is offline or returned an error.</p>
+            <div class="troubleshooting">
+              <span class="troubleshoot-title">Troubleshooting:</span>
+              <p>Make sure the Flask API server is running on local port 5000:</p>
+              <code>cd Backend</code>
+              <code>python app.py</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE 4: Prediction Results Panel -->
+        <div id="state-result" class="result-details hidden">
+          
+          <!-- Result Header -->
+          <div class="result-summary-header">
+            <div class="prediction-info">
+              <span class="engine-badge" id="res-badge">ML ENGINE</span>
+              <div class="winner-label" id="res-label">Patent</div>
+              <p class="inferenced-title">Predicted Category</p>
+            </div>
+            
+            <!-- Circular Confidence Gauge -->
+            <div class="gauge-ring-wrap">
+              <svg class="gauge-svg-element" viewBox="0 0 100 100">
+                <circle class="gauge-path" cx="50" cy="50" r="40"></circle>
+                <circle class="gauge-value" id="result-gauge-ring" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+              </svg>
+              <div class="gauge-overlay">
+                <span class="gauge-percentage-text" id="res-conf">0%</span>
+                <span class="gauge-label-text">CONFIDENCE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metadata & Details Table -->
+          <div class="summary-details-card">
+            <div class="detail-item">
+              <span class="detail-label">Inference Model</span>
+              <span class="detail-value" id="res-inference-core">Gradient Boosting</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Predicted Index</span>
+              <span class="detail-value" id="res-idx">0</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Input Size</span>
+              <span class="detail-value highlight-cyan">37 Features scaled</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Inference Latency</span>
+              <span class="detail-value" id="res-latency">42 ms</span>
+            </div>
+          </div>
+
+          <!-- Probability Distribution Bars -->
+          <div class="probability-distribution-section">
+            <h3>Inference Distribution Mapping</h3>
+            <div class="probability-bars-container" id="prob-bars-root">
+              <!-- Dynamically populated via app.js -->
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="result-actions-footer">
+            <button type="button" class="btn-secondary" onclick="downloadSimulationJSON()"><i data-lucide="download"></i> Download Report</button>
+            <button type="button" class="btn-secondary" onclick="resetSimulator()"><i data-lucide="refresh-cw"></i> Flush Core</button>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <!-- Dynamic Toast messages -->
+  <div id="toast" class="toast-popup">
+    <i data-lucide="info" id="toast-icon"></i>
+    <span id="toast-text">System notification</span>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
